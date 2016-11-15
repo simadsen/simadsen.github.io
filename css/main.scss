@@ -1,0 +1,364 @@
+// PARTIALS
+@import "partials/_reset.scss";
+
+// FONT IMPORTS
+@import url('https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300,700');
+
+// COLORS
+$darkclouds: #3c4b4f;
+$deepnight: #232d33;
+$darkText: #3c4b4f;
+$concrete: rgba(149, 165, 166, 1);
+$inverted-text-color: #ecf0f1;
+$bg-color: #ecf0f1;
+$primary-color: #3498db;
+$secondary-color: #ffbd44;
+
+%gradientMild {
+	background: #67B26F; /* fallback for old browsers */
+	background: -webkit-linear-gradient(right, #67B26F, #4ca2cd);
+	background: -o-linear-gradient(right, #67B26F, #4ca2cd);
+	background: linear-gradient(to left, #67B26F, #4ca2cd); /* Chrome 10-25, Safari 5.1-6 */ /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+
+// RESPONSIVE VARIABLES
+$mobile-width: 400px;
+$tablet-width: 600px;
+$desktop-width: 920px;
+$phi: 1.61803398875;
+$cardWidth: 380px;
+$cardBorderRadius: 5px;
+$nav-height: 80px;
+$scroll-width: 5px;
+
+
+// RESPONSIVE MIXINS
+@mixin mobile {
+  @media (min-width: #{$mobile-width}) and (max-width: #{$tablet-width + 29px}) {
+    @content;
+  }
+}
+
+@mixin tablet {
+  @media (min-width: #{$tablet-width}+30) and (max-width: #{$desktop-width + 29px}) {
+    @content;
+  }
+}
+
+@mixin desktop {
+  @media (min-width: #{$desktop-width + 30}) {
+    @content;
+  }
+}
+
+@mixin hideOverflow ($lines) {
+   overflow: hidden;
+   display: -webkit-box !important;
+   line-height: $lineHeight;
+   max-height: $lines !important;
+   -webkit-text-fill-color: transparent;
+   background: -webkit-linear-gradient($concrete, rgba(149, 165, 166, 0));
+   background: -o-linear-gradient($concrete, rgba(149, 165, 166, 0));
+   background: linear-gradient($concrete, rgba(149, 165, 166, 0));
+   -webkit-box-orient: vertical;
+   -webkit-background-clip: text;
+   -webkit-transition: all 0.3s ease-in-out 0s;
+   transition: all 0.3s ease-in-out 0s;
+   &.showOverflow {
+     overflow: visible;
+     display: normal !important;
+     max-height: none !important;
+     -webkit-text-fill-color: $darkclouds;
+     background: none;
+     -webkit-box-orient: vertical;
+     -webkit-transition: all 0.3s ease-in-out 0s;
+     transition: all 0.3s ease-in-out 0s;
+     margin-bottom: $nav-height;
+   }
+   @content;
+}
+
+// FONTS
+$lineHeight: 1.45em;
+
+%standardText {
+  font-family: 'Open Sans', 'Roboto', sans-serif;
+  line-height: $lineHeight;
+  font-size: 22px;
+  color: $darkText;
+}
+
+// MENU STYLING MIXINS
+@mixin menu-styling-mobile {
+  position: fixed;
+  bottom: 0px;
+  width: 100%;
+  ul {
+    li {
+      background-color: $darkclouds;
+      float: left;
+      color: $inverted-text-color;
+      width: 20%;
+      text-align: center;
+      display: inline-block;
+      padding: 20px 0px 15px 0px;
+      text-transform: lowercase;
+    }
+  }
+  @content;
+}
+
+@mixin menu-styling-desktop ($white-space-top, $white-space-bottom, $menu-item-whitespace) {
+  ul {
+    .menu-items {
+      float: right;
+      li {
+        padding: 0px 0px 0px $menu-item-whitespace;
+        a {
+          font-size: 15px;
+          text-transform: uppercase;
+          letter-spacing: 0.075em;
+          font-weight: 400;
+          position: relative;
+          color: $darkclouds;
+          text-decoration: none;
+          -webkit-transition: all  0.3s ease-in-out 0s;
+          transition: all 0.3s ease-in-out 0s;
+          &:before {
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            bottom: -8px;
+            left: 0;
+            background-color: $primary-color;
+            visibility: hidden;
+            -webkit-transform: scaleX(0);
+            transform: scaleX(0);
+            -webkit-transition: all 0.3s ease-in-out 0s;
+            transition: all 0.3s ease-in-out 0s;
+          }
+          &:hover {
+            color: $deepnight;
+          }
+          &:hover:before {
+            visibility: visible;
+            -webkit-transform: scaleX(1);
+            transform: scaleX(1);
+          }
+        }
+      }
+    }
+    margin: $white-space-top auto $white-space-bottom auto;
+  }
+  @media (max-width: #{$desktop-width + 100px}) {
+    & {
+    width: 90%;
+    }
+  }
+  @content;
+}
+
+/*********************
+ *      DOM          *
+ *      STYLING      *
+ *********************/
+
+body {
+  @extend %standardText;
+  background-color: #e2e9ea;
+}
+
+p {
+  @extend %standardText;
+}
+
+.menu {
+  // SCREEN SIZE DEPENDENT .menu STYLING
+  @include mobile {
+    @include menu-styling-mobile {
+      ul li:last-child {
+        i {
+          display: none;
+        }
+      }
+    }
+  }
+  @include tablet {
+    width: $tablet-width;
+    margin: auto;
+    @include menu-styling-desktop (28px, 32px, 30px) {
+      ul li:last-child {
+        i {
+          display: none;
+        }
+      }
+    }
+  }
+  @include desktop {
+    width: $desktop-width;
+    margin: auto;
+    @include menu-styling-desktop (48px, 65px, 45px) {
+    }
+  }
+  svg.logo {
+    display: inline-block;
+    width: 40px;
+    position: relative;
+    bottom: 10px;
+  }
+  // GLOBAL .menu STYLING
+  ul {
+  	list-style-type: none;
+    display: block;
+    li {
+    	display: inline-block;
+    }
+    .menu-items {
+      i {
+        font-size: 0.85em;
+        position: relative;
+        bottom: 1px;
+        font-weight: 300;
+      }
+    }
+  }
+}
+
+.deck {
+  @include mobile {
+    box-shadow: none;
+    border-radius: 0px;
+    ul li img {
+      max-height: $mobile-width;
+      padding-top: 10px !important;
+    }
+    ul li h2 {
+      font-size: 30px !important;
+    }
+  }
+  @include tablet {
+    width: $tablet-width;
+    height: $phi*$mobile-width;
+    margin: auto;
+    ul li p {
+      @include hideOverflow (9.0em) {
+
+      }
+      font-size: 22px;
+    }
+    ul li img {
+      height: (1/$phi)*$mobile-width;
+      padding-top: 5px !important;
+    }
+    ul li h2 {
+      font-size: 36px !important;
+    }
+  }
+  @include desktop {
+    width: $desktop-width;
+    height: (1/$phi) * $desktop-width;
+    display: block;
+    margin: auto;
+    ul {
+      li {
+        img {
+          height: (1-(1/$phi))*$desktop-width;
+          padding-top: 10px !important;
+        }
+        h2 {
+        font-size: 40px !important;
+        text-align: left !important;
+        margin: 0px 0px 0px 5% !important;
+        }
+        p {
+          @include hideOverflow (4.5em) {
+
+          }
+          font-size: 22px;
+        }
+      }
+    }
+  }
+  position: relative;
+  display: block;
+  background-color: $bg-color;
+  box-shadow: 0px 1px 3px #95a5a6;
+  border-radius: 5px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  &::-webkit-scrollbar {
+    -webkit-appearance: none;
+    position: absolute;
+    width: $scroll-width;
+  }
+  &::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background-color: rgba(149, 165, 166, 0.75);
+    -webkit-box-shadow: none;
+  }
+  ul {
+    li {
+      position: relative;
+      left: $scroll-width/2;
+      overflow: hidden;
+      h2 {
+        font-family: 'Open Sans Condensed', sans-serif;
+        font-weight: 300;
+        font-size: 36px;
+        text-transform: uppercase;
+        text-align: center;
+        color: $darkclouds;
+        padding: 25px 0px;
+        &::before {
+          content: "";
+          color: $concrete;
+          font-weight: 300;
+        }
+      }
+      img {
+        max-width: 100%;
+        display: flex;
+        margin: auto;
+        overflow: hidden;
+      }
+      p {
+        font-family: 'Open Sans Condensed', sans-serif;
+        text-align: justify;
+        margin: auto;
+        overflow: hidden !important;
+        width: 90%;
+      }
+    }
+  }
+}
+
+
+
+.controls {
+  @include tablet {
+    width: $tablet-width;
+  }
+  @include desktop {
+    width: $desktop-width;
+  }
+  min-height: $nav-height - 20;
+  border-radius: 0px 0px 5px 5px;
+  position: relative;
+  display: block;
+  background-color: $secondary-color;
+  bottom: $nav-height - 20;
+  margin: auto;
+  left: 0;
+  right: 0;
+  .nav {
+    /*margin: 25px 0px 90px;*/
+    text-align: center;
+    display: block;
+    li {
+      display: inline;
+    }
+  }
+}
+
+// CLASSES CALLED ON FUNCTIONS
